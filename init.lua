@@ -91,7 +91,7 @@ vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 
 -- Set to true if you have a Nerd Font installed and selected in the terminal
-vim.g.have_nerd_font = false
+vim.g.have_nerd_font = true
 
 -- [[ Setting options ]]
 -- See `:help vim.opt`
@@ -190,6 +190,13 @@ vim.keymap.set('n', '<C-l>', '<C-w><C-l>', { desc = 'Move focus to the right win
 vim.keymap.set('n', '<C-j>', '<C-w><C-j>', { desc = 'Move focus to the lower window' })
 vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper window' })
 
+-- closing paranthesis
+vim.keymap.set('i', '"', '""<left>')
+vim.keymap.set('i', "'", "''<left>")
+vim.keymap.set('i', '(', '()<left>')
+vim.keymap.set('i', '[', '[]<left>')
+vim.keymap.set('i', '{', '{}<left>')
+
 -- [[ Basic Autocommands ]]
 --  See `:help lua-guide-autocommands`
 
@@ -203,6 +210,105 @@ vim.api.nvim_create_autocmd('TextYankPost', {
     vim.highlight.on_yank()
   end,
 })
+
+-- Find and Replace
+vim.cmd 'vnoremap <expr> <c-h> ":s/" . input("find: ") . "/" . input("replace: ") . "/g<cr>"'
+
+-- Language specific autocommands
+-- c
+vim.api.nvim_create_autocmd('FileType', {
+  pattern = 'c',
+  callback = function()
+    vim.keymap.set('n', '<c-b>', '<cmd>make<cr>')
+  end,
+})
+vim.api.nvim_create_autocmd('FileType', {
+  pattern = 'c',
+  callback = function()
+    vim.keymap.set('n', '<c-c>', 'I// <esc>')
+  end,
+})
+vim.api.nvim_create_autocmd('FileType', {
+  pattern = 'c',
+  callback = function()
+    vim.keymap.set('n', '<c-x>', '<home>xxx')
+  end,
+})
+-- python
+vim.api.nvim_create_autocmd('FileType', {
+  pattern = 'python',
+  callback = function()
+    vim.keymap.set('n', '<c-c>', 'I# <esc>')
+  end,
+})
+vim.api.nvim_create_autocmd('FileType', {
+  pattern = 'python',
+  callback = function()
+    vim.keymap.set('n', '<c-x>', '<home>xx')
+  end,
+})
+vim.api.nvim_create_autocmd('FileType', {
+  pattern = 'python',
+  callback = function()
+    vim.keymap.set('v', '<c-c>', 'I# <esc>')
+  end,
+})
+-- rust
+vim.api.nvim_create_autocmd('FileType', {
+  pattern = 'rust',
+  callback = function()
+    vim.keymap.set('n', '<c-b>', '<cmd>w<cr>' .. '<cmd>!cargo build<cr>')
+  end,
+})
+vim.api.nvim_create_autocmd('FileType', {
+  pattern = 'rust',
+  callback = function()
+    vim.keymap.set('n', '<c-r>', '<cmd>w<cr>' .. '<cmd>!cargo run<cr>')
+  end,
+})
+vim.api.nvim_create_autocmd('FileType', {
+  pattern = 'rust',
+  callback = function()
+    vim.keymap.set('n', '<c-t>', '<cmd>w<cr>' .. '<cmd>!cargo test<cr>')
+  end,
+})
+vim.api.nvim_create_autocmd('FileType', {
+  pattern = 'rust',
+  callback = function()
+    vim.keymap.set('n', '<c-c>', 'I// <esc>')
+  end,
+})
+vim.api.nvim_create_autocmd('FileType', {
+  pattern = 'rust',
+  callback = function()
+    vim.keymap.set('n', '<c-x>', '<home>xxx')
+  end,
+})
+-- apl
+vim.api.nvim_create_autocmd('FileType', {
+  pattern = 'apl',
+  callback = function()
+    vim.keymap.set('n', '<c-r>', '<cmd>w<cr>' .. '<cmd>!dyalog -script DYALOG_LINEEDITOR_MODE=1 %<cr>')
+  end,
+})
+-- haskell
+vim.api.nvim_create_autocmd('FileType', {
+  pattern = 'haskell',
+  callback = function()
+    vim.keymap.set('n', '<c-r>', '<cmd>w<cr>' .. '<cmd>!cghc -dynamic %<cr>')
+  end,
+})
+
+-- LSP
+-- Covered in nvim-lspconfig with green colorscheme
+-- This one defaults to grey color.
+-- If you have both you will have duplicates
+-- <v0.10
+-- vim.lsp.inlay_hint(0, true)
+-- v0.10
+if vim.version().minor >= 10 then
+  vim.lsp.inlay_hint.enable(true, nil)
+end
 
 -- [[ Install `lazy.nvim` plugin manager ]]
 --    See `:help lazy.nvim.txt` or https://github.com/folke/lazy.nvim for more info
@@ -424,6 +530,9 @@ require('lazy').setup({
       -- used for completion, annotations and signatures of Neovim apis
       { 'folke/neodev.nvim', opts = {} },
     },
+    opts = {
+      inlay_hints = { enable = true },
+    },
     config = function()
       -- Brief aside: **What is LSP?**
       --
@@ -565,10 +674,16 @@ require('lazy').setup({
       --  - settings (table): Override the default settings passed when initializing the server.
       --        For example, to see the options for `lua_ls`, you could go to: https://luals.github.io/wiki/settings/
       local servers = {
-        -- clangd = {},
-        -- gopls = {},
-        -- pyright = {},
-        -- rust_analyzer = {},
+        clangd = {},
+        gopls = {},
+        pyright = {},
+        rust_analyzer = {},
+        html = {},
+        jsonls = {},
+        yamlls = {},
+        pest_ls = {},
+        zls = {},
+        taplo = {}, --toml
         -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
         --
         -- Some languages (like typescript) have entire language plugins that can be useful:
@@ -835,7 +950,7 @@ require('lazy').setup({
     'nvim-treesitter/nvim-treesitter',
     build = ':TSUpdate',
     opts = {
-      ensure_installed = { 'bash', 'c', 'html', 'lua', 'luadoc', 'markdown', 'vim', 'vimdoc' },
+      ensure_installed = { 'bash', 'c', 'html', 'lua', 'luadoc', 'markdown', 'vim', 'vimdoc', 'rust', 'go', 'python', 'toml', 'json', 'make', 'cmake', 'latex' },
       -- Autoinstall languages that are not installed
       auto_install = true,
       highlight = {
@@ -863,7 +978,145 @@ require('lazy').setup({
       --    - Treesitter + textobjects: https://github.com/nvim-treesitter/nvim-treesitter-textobjects
     end,
   },
+  {
+    -- Folder Tree
+    'nvim-neo-tree/neo-tree.nvim',
+    branch = 'v3.x',
+    dependencies = {
+      'nvim-lua/plenary.nvim',
+      'nvim-tree/nvim-web-devicons', -- not strictly required, but recommended
+      'MunifTanjim/nui.nvim',
+    },
+    cmd = 'Neotree',
+    keys = { { '<C-f>', '<cmd>Neotree toggle<cr>', desc = 'NeoTree' } },
+  },
+  {
+    -- Colored brackets
+    'frazrepo/vim-rainbow',
+    config = function()
+      vim.g.rainbow_active = 1
+    end,
+  },
+  {
+    -- Cargo crate versions and features
+    'saecki/crates.nvim',
+    event = { 'BufRead Cargo.toml' },
+    tag = 'v0.3.0',
+    dependencies = { 'nvim-lua/plenary.nvim' },
+    opts = {},
+  },
+  {
+    -- pest parser LSP and syntax highlighting
+    -- Prerequisite for LSP features
+    --   cargo install pest-language-server
+    --     Requires openssl
+    'pest-parser/pest.vim',
+    event = { 'BufRead *.pest' },
+    dependencies = { 'williamboman/mason.nvim' },
+    config = function()
+      require('pest-vim').setup {}
+      require('mason-lspconfig').setup_handlers {
+        ['pest_ls'] = function()
+          require('pest-vim').setup {}
+        end,
+      }
+    end,
+  },
+  {
+    -- Rust Support
+    'simrat39/rust-tools.nvim',
+    event = { 'BufRead *.rs' },
+    dependencies = {
+      'neovim/nvim-lspconfig',
+      'nvim-lua/plenary.nvim', --Debugging
+      -- 'mfussenegger/nvim-dap',
+    },
+    config = function()
+      local rt = require 'rust-tools'
+      --rt.inlay_hints.disable()
+      rt.setup {
+        tools = {
+          inlay_hints = {
+            auto = false,
+            show_parameter_hints = false,
+          },
+        },
+        server = {
+          on_attach = function(_, bufnr)
+            -- Hover actions
+            vim.keymap.set('n', '<C-s>', rt.hover_actions.hover_actions, { buffer = bufnr, desc = 'hover actions' })
+            -- Code action groups
+            vim.keymap.set('n', '<C-a>', rt.code_action_group.code_action_group, { buffer = bufnr, desc = 'code actions' })
+          end,
+        },
+      }
+    end,
+  },
+  --{
+  -- Adds go language support: e.g.
+  -- :GoBuild
+  -- :GoTest
+  -- :GoInstall
+  -- :GoRun
+  -- Requires gopls
+  --  'fatih/vim-go',
+  --  build = ':GoUpdateBinaries',
+  --  event = {"BufRead *.go"},
+  --  config = function()
+  --    vim.g.go_def_mode = 'gopls'
+  --    vim.g.go_info_mode = 'gopls'
+  --    vim.g.go_gopls_enabled = 0
+  --  end,
+  --},
+  {
+    'ray-x/go.nvim',
+    dependencies = { -- optional packages
+      'ray-x/guihua.lua',
+      'neovim/nvim-lspconfig',
+      'nvim-treesitter/nvim-treesitter',
+    },
+    config = function()
+      require('go').setup()
+      require('go.format').goimport() -- goimport + gofmt
 
+      -- Run gofmt + goimport on save
+      local format_sync_grp = vim.api.nvim_create_augroup('GoImport', {})
+      vim.api.nvim_create_autocmd('BufWritePre', {
+        pattern = '*.go',
+        callback = function()
+          require('go.format').goimport()
+        end,
+        group = format_sync_grp,
+      })
+    end,
+    event = { 'BufRead *.go' },
+    ft = { 'go', 'gomod' },
+    build = ':lua require("go.install").update_all_sync()', -- if you need to install/update all binaries
+  },
+  {
+    'neovimhaskell/haskell-vim',
+    event = { 'BufRead *.hs' },
+    config = function()
+      vim.g.haskell_enable_quantification = 1 -- to enable highlighting of `forall`
+      vim.g.haskell_enable_recursivedo = 1 -- to enable highlighting of `mdo` and `rec`
+      vim.g.haskell_enable_arrowsyntax = 1 -- to enable highlighting of `proc`
+      vim.g.haskell_enable_pattern_synonyms = 1 -- to enable highlighting of `pattern`
+      vim.g.haskell_enable_typeroles = 1 -- to enable highlighting of type roles
+      vim.g.haskell_enable_static_pointers = 1 -- to enable highlighting of `static`
+      vim.g.haskell_backpack = 1 -- to enable highlighting of backpack keywords
+    end,
+  },
+  {
+    -- zig file detection and syntaz highlighing
+    'ziglang/zig.vim',
+    event = { 'BufRead *.zig' },
+    ft = 'zig',
+    config = function()
+      vim.keymap.set('n', '<c-b>', '<cmd>w<cr>' .. '<cmd>compiler zig_build<cr>')
+      vim.keymap.set('n', '<c-t>', '<cmd>w<cr>' .. '<cmd>compiler zig_test<cr>')
+      vim.keymap.set('n', '<c-r>', '<cmd>w<cr>' .. '<cmd>compiler zig_build_exe<cr>')
+    end,
+  },
   -- The following two comments only work if you have downloaded the kickstart repo, not just copy pasted the
   -- init.lua. If you want these files, they are in the repository, so you can just download them and
   -- place them in the correct locations.
