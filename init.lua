@@ -1123,6 +1123,17 @@ require('lazy').setup({
       vim.keymap.set('n', '<c-r>', '<cmd>w<cr>' .. '<cmd>compiler zig_build_exe<cr>')
     end,
   },
+  {
+    'LhKipp/nvim-nu',
+    build = ':TSInstall nu',
+    event = { 'BufRead *.nu' },
+    ft = 'nu',
+    dependencies = { 'jose-elias-alvarez/null-ls.nvim' },
+    config = function()
+      vim.keymap.set('n', 'K', vim.lsp.buf.hover, { buffer = true })
+    end,
+    opts = {},
+  },
   -- The following two comments only work if you have downloaded the kickstart repo, not just copy pasted the
   -- init.lua. If you want these files, they are in the repository, so you can just download them and
   -- place them in the correct locations.
