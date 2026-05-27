@@ -157,6 +157,9 @@ vim.opt.scrolloff = 10
 -- Change how much space character spaces a Tab takes.
 vim.opt.tabstop = 4
 
+-- avante: views can only be fully collapsed with the global statusline
+vim.opt.laststatus = 3
+
 -- [[ Basic Keymaps ]]
 --  See `:help vim.keymap.set()`
 
@@ -995,6 +998,40 @@ require('lazy').setup({
     },
     cmd = 'Neotree',
     keys = { { '<C-f>', '<cmd>Neotree toggle<cr>', desc = 'NeoTree' } },
+    config = function()
+      require('neo-tree').setup {
+        filesystem = {
+          commands = {
+            avante_add_files = function(state)
+              local node = state.tree:get_node()
+              local filepath = node:get_id()
+              local relative_path = require('avante.utils').relative_path(filepath)
+
+              local sidebar = require('avante').get()
+
+              local open = sidebar:is_open()
+              -- ensure avante sidebar is open
+              if not open then
+                require('avante.api').ask()
+                sidebar = require('avante').get()
+              end
+
+              sidebar.file_selector:add_selected_file(relative_path)
+
+              -- remove neo tree buffer
+              if not open then
+                sidebar.file_selector:remove_selected_file 'neo-tree filesystem [1]'
+              end
+            end,
+          },
+          window = {
+            mappings = {
+              ['oa'] = 'avante_add_files',
+            },
+          },
+        },
+      }
+    end,
   },
   {
     -- Colored brackets
@@ -1139,7 +1176,7 @@ require('lazy').setup({
     -- enabled = false,
     -- if you want to build from source then do `make BUILD_FROM_SOURCE=true`
     -- ⚠️ must add this setting! ! !
-    build = vim.fn.has 'win32' ~= 0 and 'powershell -ExecutionPolicy Bypass -File Build.ps1 -BuildFromSource false' or 'make BUILD_FROM_SOURCE=true',
+    build = vim.fn.has 'win32' ~= 0 and 'powershell -ExecutionPolicy Bypass -File Build.ps1 -BuildFromSource false' or 'make',
     event = 'VeryLazy',
     version = false, -- Never set this value to "*"! Never!
     ---@module 'avante'
@@ -1155,6 +1192,10 @@ require('lazy').setup({
           endpoint = 'http://10.31.0.6:11434',
           model = 'gemma4:e4b',
         },
+      },
+      web_search_engine = {
+        provider = 'kagi',
+        proxy = nil,
       },
     },
     dependencies = {
