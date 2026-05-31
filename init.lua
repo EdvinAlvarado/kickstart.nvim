@@ -1004,9 +1004,9 @@ require('lazy').setup({
     event = { 'BufRead *.nu' },
     ft = 'nu',
     dependencies = { 'nvimtools/none-ls.nvim' },
-    config = function()
-      vim.keymap.set('n', 'K', vim.lsp.buf.hover, { buffer = true })
-    end,
+    keys = {
+      vim.keymap.set('n', 'K', vim.lsp.buf.hover, { buffer = true }),
+    },
     opts = {},
   },
   {
