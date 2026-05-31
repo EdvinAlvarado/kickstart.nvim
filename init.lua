@@ -882,7 +882,7 @@ require('lazy').setup({
     -- Cargo crate versions and features
     'saecki/crates.nvim',
     event = { 'BufRead Cargo.toml' },
-    tag = 'v0.3.0',
+    tag = 'stable',
     dependencies = { 'nvim-lua/plenary.nvim' },
     opts = {},
   },
