@@ -870,40 +870,6 @@ require('lazy').setup({
     },
     cmd = 'Neotree',
     keys = { { '<C-f>', '<cmd>Neotree toggle<cr>', desc = 'NeoTree' } },
-    config = function()
-      require('neo-tree').setup {
-        filesystem = {
-          commands = {
-            avante_add_files = function(state)
-              local node = state.tree:get_node()
-              local filepath = node:get_id()
-              local relative_path = require('avante.utils').relative_path(filepath)
-
-              local sidebar = require('avante').get()
-
-              local open = sidebar:is_open()
-              -- ensure avante sidebar is open
-              if not open then
-                require('avante.api').ask()
-                sidebar = require('avante').get()
-              end
-
-              sidebar.file_selector:add_selected_file(relative_path)
-
-              -- remove neo tree buffer
-              if not open then
-                sidebar.file_selector:remove_selected_file 'neo-tree filesystem [1]'
-              end
-            end,
-          },
-          window = {
-            mappings = {
-              ['oa'] = 'avante_add_files',
-            },
-          },
-        },
-      }
-    end,
   },
   {
     -- Colored brackets
@@ -1044,71 +1010,65 @@ require('lazy').setup({
     opts = {},
   },
   {
-    'yetone/avante.nvim',
-    -- enabled = false,
-    -- if you want to build from source then do `make BUILD_FROM_SOURCE=true`
-    -- ⚠️ must add this setting! ! !
-    build = vim.fn.has 'win32' ~= 0 and 'powershell -ExecutionPolicy Bypass -File Build.ps1 -BuildFromSource false' or 'make',
+    'olimorris/codecompanion.nvim',
     event = 'VeryLazy',
-    version = false, -- Never set this value to "*"! Never!
-    ---@module 'avante'
-    ---@type avante.Config
+    version = '^19',
+    keys = {
+      vim.keymap.set({ 'n', 'v' }, '<C-a>', '<cmd>CodeCompanionActions<cr>', { noremap = true, silent = true }),
+      vim.keymap.set({ 'n', 'v' }, '<LocalLeader>a', '<cmd>CodeCompanionChat Toggle<cr>', { noremap = true, silent = true }),
+      vim.keymap.set('v', 'ga', '<cmd>CodeCompanionChat Add<cr>', { noremap = true, silent = true }),
+    },
     opts = {
-      -- add any opts here
-      -- this file can contain specific instructions for your project
-      instructions_file = 'avante.md',
-      -- for example
-      provider = 'ollama',
-      providers = {
-        ollama = {
-          endpoint = 'http://10.31.0.6:11434',
+      interactions = {
+        chat = {
+          adapter = 'ollama',
           model = 'gemma4:e4b',
         },
+        inline = {
+          adapter = 'ollama',
+          model = 'gemma4:e4b',
+        },
+        cmd = {
+          adapter = 'ollama',
+          model = 'gemma4:e4b',
+        },
+        background = {
+          adapter = 'ollama',
+          model = 'qwen3:4b-instruct',
+        },
       },
-      web_search_engine = {
-        provider = 'kagi',
-        proxy = nil,
+      adapters = {
+        http = {
+          tavily = function()
+            return require('codecompanion.adapters').extend('tavily', {
+              env = {
+                api_key = 'TAVILY_API_KEY',
+              },
+            })
+          end,
+        },
       },
     },
     dependencies = {
       'nvim-lua/plenary.nvim',
-      'MunifTanjim/nui.nvim',
-      --- The below dependencies are optional,
-      'nvim-mini/mini.pick', -- for file_selector provider mini.pick
-      'nvim-telescope/telescope.nvim', -- for file_selector provider telescope
-      'hrsh7th/nvim-cmp', -- autocompletion for avante commands and mentions
-      'ibhagwan/fzf-lua', -- for file_selector provider fzf
-      'stevearc/dressing.nvim', -- for input provider dressing
-      'folke/snacks.nvim', -- for input provider snacks
-      'nvim-tree/nvim-web-devicons', -- or echasnovski/mini.icons
-      'zbirenbaum/copilot.lua', -- for providers='copilot'
+      'nvim-treesitter/nvim-treesitter',
       {
-        -- support for image pasting
+        'MeanderingProgrammer/render-markdown.nvim',
+        ft = { 'markdown', 'codecompanion' },
+      },
+      {
         'HakonHarnes/img-clip.nvim',
-        event = 'VeryLazy',
         opts = {
-          -- recommended settings
-          default = {
-            embed_image_as_base64 = false,
+          filetypes = {
+            codecompanion = {
             prompt_for_file_name = false,
-            drag_and_drop = {
-              insert_mode = true,
-            },
-            -- required for Windows users
+              template = '[Image]($FILE_PATH)',
             use_absolute_path = true,
           },
         },
       },
-      {
-        -- Make sure to set this up properly if you have lazy=true
-        'MeanderingProgrammer/render-markdown.nvim',
-        dependencies = { 'nvim-treesitter/nvim-treesitter', 'nvim-mini/mini.nvim' },
-        ---@module 'render-markdown'
-        ---@type render.md.UserConfig
-        opts = {
-          file_types = { 'markdown', 'Avante' },
-        },
-        ft = { 'markdown', 'Avante' },
+      },
+    },
       },
     },
   },
