@@ -951,6 +951,9 @@ require('lazy').setup({
   --},
   {
     'ray-x/go.nvim',
+    event = { 'BufRead *.go' },
+    ft = { 'go', 'gomod' },
+    build = ':lua require("go.install").update_all_sync()', -- if you need to install/update all binaries
     dependencies = { -- optional packages
       'ray-x/guihua.lua',
       'neovim/nvim-lspconfig',
@@ -970,9 +973,6 @@ require('lazy').setup({
         group = format_sync_grp,
       })
     end,
-    event = { 'BufRead *.go' },
-    ft = { 'go', 'gomod' },
-    build = ':lua require("go.install").update_all_sync()', -- if you need to install/update all binaries
   },
   {
     'neovimhaskell/haskell-vim',
