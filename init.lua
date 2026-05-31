@@ -193,10 +193,10 @@ vim.keymap.set('t', '<Esc><Esc>', '<C-\\><C-n>', { desc = 'Exit terminal mode' }
 --  Use CTRL+<hjkl> to switch between windows
 --
 --  See `:help wincmd` for a list of all window commands
-vim.keymap.set('n', '<C-h>', '<C-w><C-h>', { desc = 'Move focus to the left window' })
-vim.keymap.set('n', '<C-l>', '<C-w><C-l>', { desc = 'Move focus to the right window' })
-vim.keymap.set('n', '<C-j>', '<C-w><C-j>', { desc = 'Move focus to the lower window' })
-vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper window' })
+-- vim.keymap.set('n', '<C-h>', '<C-w><C-h>', { desc = 'Move focus to the left window' })
+-- vim.keymap.set('n', '<C-l>', '<C-w><C-l>', { desc = 'Move focus to the right window' })
+-- vim.keymap.set('n', '<C-j>', '<C-w><C-j>', { desc = 'Move focus to the lower window' })
+-- vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper window' })
 
 -- closing paranthesis
 vim.keymap.set('i', '"', '""<left>')
@@ -268,7 +268,7 @@ require('lazy').setup({
     opts = {
       signs = {
         add = { text = '+' },
-        change = { text = '~' },
+        change = { text = '~' },%{albumtitle} - %{number} - %{title}
         delete = { text = '_' },
         topdelete = { text = '‾' },
         changedelete = { text = '~' },
@@ -1039,18 +1039,27 @@ require('lazy').setup({
         opts = {
           filetypes = {
             codecompanion = {
-            prompt_for_file_name = false,
+              prompt_for_file_name = false,
               template = '[Image]($FILE_PATH)',
-            use_absolute_path = true,
+              use_absolute_path = true,
+            },
           },
         },
       },
-      },
     },
+    {
+      'https://git.sr.ht/~swaits/zellij-nav.nvim',
+      lazy = true,
+      event = 'VeryLazy',
+      keys = {
+        { '<c-h>', '<cmd>ZellijNavigateLeft<cr>', { silent = true, desc = 'navigate left' } },
+        { '<c-j>', '<cmd>ZellijNavigateDown<cr>', { silent = true, desc = 'navigate down' } },
+        { '<c-k>', '<cmd>ZellijNavigateUp<cr>', { silent = true, desc = 'navigate up' } },
+        { '<c-l>', '<cmd>ZellijNavigateRight<cr>', { silent = true, desc = 'navigate right' } },
       },
+      opts = {},
     },
   },
-
   -- The following two comments only work if you have downloaded the kickstart repo, not just copy pasted the
   -- init.lua. If you want these files, they are in the repository, so you can just download them and
   -- place them in the correct locations.
