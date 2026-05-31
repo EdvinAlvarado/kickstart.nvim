@@ -903,34 +903,13 @@ require('lazy').setup({
     end,
   },
   {
-    -- Rust Support
-    'simrat39/rust-tools.nvim',
-    event = { 'BufRead *.rs' },
-    dependencies = {
-      'neovim/nvim-lspconfig',
-      'nvim-lua/plenary.nvim', --Debugging
-      -- 'mfussenegger/nvim-dap',
-    },
-    config = function()
-      local rt = require 'rust-tools'
-      --rt.inlay_hints.disable()
-      rt.setup {
-        tools = {
-          inlay_hints = {
-            auto = false,
-            show_parameter_hints = false,
-          },
-        },
-        server = {
-          on_attach = function(_, bufnr)
-            -- Hover actions
-            vim.keymap.set('n', '<C-s>', rt.hover_actions.hover_actions, { buffer = bufnr, desc = 'hover actions' })
-            -- Code action groups
-            vim.keymap.set('n', '<C-a>', rt.code_action_group.code_action_group, { buffer = bufnr, desc = 'code actions' })
-          end,
-        },
-      }
-    end,
+    'mrcjkb/rustaceanvim',
+    -- To avoid being surprised by breaking changes,
+    -- I recommend you set a version range
+    version = '^9',
+    -- This plugin implements proper lazy-loading (see :h lua-plugin-lazy).
+    -- No need for lazy.nvim to lazy-load it.
+    lazy = false,
   },
   --{
   -- Adds go language support: e.g.
