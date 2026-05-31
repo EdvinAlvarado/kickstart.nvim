@@ -888,10 +888,9 @@ require('lazy').setup({
   },
   {
     -- pest parser LSP and syntax highlighting
-    -- Prerequisite for LSP features
-    --   cargo install pest-language-server
-    --     Requires openssl
+    -- NOTE: Requires openssl
     'pest-parser/pest.vim',
+    build = 'cargo install pest-language-server',
     event = { 'BufRead *.pest' },
     dependencies = { 'williamboman/mason.nvim' },
     config = function()
