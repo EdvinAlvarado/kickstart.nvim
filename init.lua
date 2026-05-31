@@ -160,6 +160,9 @@ vim.opt.tabstop = 4
 -- avante: views can only be fully collapsed with the global statusline
 vim.opt.laststatus = 3
 
+-- Enable inlay hint
+vim.lsp.inlay_hint.enable(true, nil)
+
 -- [[ Basic Keymaps ]]
 --  See `:help vim.keymap.set()`
 
