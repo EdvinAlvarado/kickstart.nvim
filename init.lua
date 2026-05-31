@@ -1003,7 +1003,7 @@ require('lazy').setup({
     build = ':TSInstall nu',
     event = { 'BufRead *.nu' },
     ft = 'nu',
-    dependencies = { 'jose-elias-alvarez/null-ls.nvim' },
+    dependencies = { 'nvimtools/none-ls.nvim' },
     config = function()
       vim.keymap.set('n', 'K', vim.lsp.buf.hover, { buffer = true })
     end,
