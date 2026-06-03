@@ -1026,6 +1026,13 @@ require('lazy').setup({
           end,
         },
       },
+      mcp = {
+        servers = {
+          ['kagi-search'] = {
+            cmd = { 'uvx', 'kagimcp' },
+          },
+        },
+      },
     },
     dependencies = {
       'nvim-lua/plenary.nvim',
