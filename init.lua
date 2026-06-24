@@ -656,6 +656,37 @@ require('lazy').setup({
       },
     },
   },
+  {
+    'tzachar/cmp-ai',
+    dependencies = { 'nvim-lua/plenary.nvim' },
+    config = function()
+      local cmp_ai = require 'cmp_ai.config'
+
+      cmp_ai:setup {
+        max_lines = 100,
+        provider = 'Ollama',
+        provider_options = {
+          model = 'qwen2.5-coder:14b-base',
+          auto_unload = true, -- Set to true to automatically unload the model when exiting nvim.
+          prompt = function(lines_before, lines_after)
+            -- You may include filetype and/or other project-wise context in this string as well.
+            -- Consult model documentation in case there are special tokens for this.
+            return '<|fim_prefix|>' .. lines_before .. '<|fim_suffix|>' .. lines_after .. '<|fim_middle|>'
+          end,
+        },
+        notify = true,
+        notify_callback = function(msg)
+          vim.notify(msg)
+        end,
+        run_on_every_keystroke = true,
+        ignored_file_types = {
+          -- default is not to ignore
+          -- uncomment to ignore in lua:
+          -- lua = true
+        },
+      }
+    end,
+  },
   { -- Autocompletion
     'hrsh7th/nvim-cmp',
     event = 'InsertEnter',
@@ -691,6 +722,7 @@ require('lazy').setup({
       --  into multiple repos for maintenance purposes.
       'hrsh7th/cmp-nvim-lsp',
       'hrsh7th/cmp-path',
+      'tzachar/cmp-ai', -- adds ollama support
     },
     config = function()
       -- See `:help cmp`
@@ -754,7 +786,16 @@ require('lazy').setup({
               luasnip.jump(-1)
             end
           end, { 'i', 's' }),
-
+          ['<C-x>'] = cmp.mapping(
+            cmp.mapping.complete {
+              config = {
+                sources = cmp.config.sources {
+                  { name = 'cmp_ai' },
+                },
+              },
+            },
+            { 'i' }
+          ),
           -- For more advanced Luasnip keymaps (e.g. selecting choice nodes, expansion) see:
           --    https://github.com/L3MON4D3/LuaSnip?tab=readme-ov-file#keymaps
         },
@@ -762,6 +803,7 @@ require('lazy').setup({
           { name = 'nvim_lsp' },
           { name = 'luasnip' },
           { name = 'path' },
+          { name = 'cmp_ai' },
         },
       }
     end,
