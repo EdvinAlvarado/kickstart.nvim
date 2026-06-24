@@ -1033,28 +1033,49 @@ require('lazy').setup({
     'olimorris/codecompanion.nvim',
     event = 'VeryLazy',
     version = '^19',
+    dependencies = {
+      'nvim-lua/plenary.nvim',
+      'nvim-treesitter/nvim-treesitter',
+      {
+        'MeanderingProgrammer/render-markdown.nvim',
+        ft = { 'markdown', 'codecompanion' },
+      },
+      {
+        'HakonHarnes/img-clip.nvim',
+        opts = {
+          filetypes = {
+            codecompanion = {
+              prompt_for_file_name = false,
+              template = '[Image]($FILE_PATH)',
+              use_absolute_path = true,
+            },
+          },
+        },
+      },
+    },
     keys = {
       vim.keymap.set({ 'n', 'v' }, '<C-a>', '<cmd>CodeCompanionActions<cr>', { noremap = true, silent = true }),
       vim.keymap.set({ 'n', 'v' }, '<LocalLeader>a', '<cmd>CodeCompanionChat Toggle<cr>', { noremap = true, silent = true }),
       vim.keymap.set('v', 'ga', '<cmd>CodeCompanionChat Add<cr>', { noremap = true, silent = true }),
+      vim.keymap.set({ 'n', 'v' }, '<LocalLeader>c', '<cmd>CodeCompanion<cr>', { noremap = true, silent = true }),
     },
     opts = {
       interactions = {
         chat = {
           adapter = 'ollama',
-          model = 'gemma4:e4b',
+          model = 'qwen2.5-coder',
         },
         inline = {
           adapter = 'ollama',
-          model = 'gemma4:e4b',
+          model = 'qwen2.5-coder',
         },
         cmd = {
           adapter = 'ollama',
-          model = 'gemma4:e4b',
+          model = 'qwen2.5-coder',
         },
         background = {
           adapter = 'ollama',
-          model = 'qwen3:4b-instruct',
+          model = 'qwen3',
         },
       },
       adapters = {
@@ -1076,25 +1097,6 @@ require('lazy').setup({
         },
       },
     },
-    dependencies = {
-      'nvim-lua/plenary.nvim',
-      'nvim-treesitter/nvim-treesitter',
-      {
-        'MeanderingProgrammer/render-markdown.nvim',
-        ft = { 'markdown', 'codecompanion' },
-      },
-      {
-        'HakonHarnes/img-clip.nvim',
-        opts = {
-          filetypes = {
-            codecompanion = {
-              prompt_for_file_name = false,
-              template = '[Image]($FILE_PATH)',
-              use_absolute_path = true,
-            },
-          },
-        },
-      },
     },
     {
       'https://git.sr.ht/~swaits/zellij-nav.nvim',
