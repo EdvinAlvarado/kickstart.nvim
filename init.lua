@@ -1097,6 +1097,21 @@ require('lazy').setup({
         },
       },
     },
+  },
+  {
+    'github/copilot.vim',
+    enabled = false,
+    event = 'VeryLazy',
+    keys = {},
+  },
+  {
+    'ggml-org/llama.vim',
+    enabled = false,
+    event = 'VeryLazy',
+    keys = {
+      vim.keymap.set('n', '<LocalLeader>l', '<cmd>Llama<cr>', { noremap = true, silent = true }),
+      vim.keymap.set('n', '<LocalLeader>c', '<cmd>LlamaChat<cr>', { noremap = true, silent = true }),
+      vim.keymap.set('v', '<LocalLeader>c', '<cmd>LlamaChat<cr>', { noremap = true, silent = true }),
     },
     {
       'https://git.sr.ht/~swaits/zellij-nav.nvim',
