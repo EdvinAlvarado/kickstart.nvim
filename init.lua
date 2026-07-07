@@ -163,6 +163,17 @@ vim.opt.laststatus = 3
 -- Enable inlay hint
 vim.lsp.inlay_hint.enable(true, nil)
 
+-- Automatically enable all LSPs in lsp/
+-- Not required if using Mason
+local lsp_configs = {}
+
+for _, f in pairs(vim.api.nvim_get_runtime_file('lsp/*.lua', true)) do
+  local server_name = vim.fn.fnamemodify(f, ':t:r')
+  table.insert(lsp_configs, server_name)
+end
+
+vim.lsp.enable(lsp_configs)
+
 -- [[ Basic Keymaps ]]
 --  See `:help vim.keymap.set()`
 
@@ -599,6 +610,7 @@ require('lazy').setup({
         'zls',
         'taplo', --toml
         'lua_ls',
+        'tinymist', --typst
         -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
         --
         -- Some languages (like typescript) have entire language plugins that can be useful:
@@ -619,7 +631,6 @@ require('lazy').setup({
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
     end,
   },
-
   { -- Autoformat
     'stevearc/conform.nvim',
     lazy = false,
@@ -666,7 +677,7 @@ require('lazy').setup({
         max_lines = 100,
         provider = 'Ollama',
         provider_options = {
-          model = 'qwen2.5-coder:14b-base',
+          model = 'qwen3:8b',
           auto_unload = true, -- Set to true to automatically unload the model when exiting nvim.
           prompt = function(lines_before, lines_after)
             -- You may include filetype and/or other project-wise context in this string as well.
@@ -1063,15 +1074,15 @@ require('lazy').setup({
       interactions = {
         chat = {
           adapter = 'ollama',
-          model = 'qwen2.5-coder',
+          model = 'qwen3',
         },
         inline = {
           adapter = 'ollama',
-          model = 'qwen2.5-coder',
+          model = 'qwen3',
         },
         cmd = {
           adapter = 'ollama',
-          model = 'qwen2.5-coder',
+          model = 'qwen3',
         },
         background = {
           adapter = 'ollama',
@@ -1100,8 +1111,7 @@ require('lazy').setup({
   },
   {
     'github/copilot.vim',
-    enabled = false,
-    event = 'VeryLazy',
+    enabled = true,
     keys = {},
   },
   {
