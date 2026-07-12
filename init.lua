@@ -1112,6 +1112,8 @@ require('lazy').setup({
   {
     'github/copilot.vim',
     enabled = true,
+    lazy = false,
+    cmd = 'Copilot',
     keys = {},
   },
   {
