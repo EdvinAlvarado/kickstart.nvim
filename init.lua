@@ -666,37 +666,6 @@ require('lazy').setup({
       },
     },
   },
-  {
-    'tzachar/cmp-ai',
-    dependencies = { 'nvim-lua/plenary.nvim' },
-    config = function()
-      local cmp_ai = require 'cmp_ai.config'
-
-      cmp_ai:setup {
-        max_lines = 100,
-        provider = 'Ollama',
-        provider_options = {
-          model = 'qwen3:8b',
-          auto_unload = true, -- Set to true to automatically unload the model when exiting nvim.
-          prompt = function(lines_before, lines_after)
-            -- You may include filetype and/or other project-wise context in this string as well.
-            -- Consult model documentation in case there are special tokens for this.
-            return '<|fim_prefix|>' .. lines_before .. '<|fim_suffix|>' .. lines_after .. '<|fim_middle|>'
-          end,
-        },
-        notify = true,
-        notify_callback = function(msg)
-          vim.notify(msg)
-        end,
-        run_on_every_keystroke = true,
-        ignored_file_types = {
-          -- default is not to ignore
-          -- uncomment to ignore in lua:
-          -- lua = true
-        },
-      }
-    end,
-  },
   { -- Autocompletion
     'hrsh7th/nvim-cmp',
     event = 'InsertEnter',
@@ -732,7 +701,7 @@ require('lazy').setup({
       --  into multiple repos for maintenance purposes.
       'hrsh7th/cmp-nvim-lsp',
       'hrsh7th/cmp-path',
-      'tzachar/cmp-ai', -- adds ollama support
+      'milanglacier/minuet-ai.nvim', -- optional; adds ai completion support
     },
     config = function()
       -- See `:help cmp`
@@ -796,24 +765,24 @@ require('lazy').setup({
               luasnip.jump(-1)
             end
           end, { 'i', 's' }),
-          ['<C-x>'] = cmp.mapping(
-            cmp.mapping.complete {
-              config = {
-                sources = cmp.config.sources {
-                  { name = 'cmp_ai' },
-                },
-              },
-            },
-            { 'i' }
-          ),
           -- For more advanced Luasnip keymaps (e.g. selecting choice nodes, expansion) see:
           --    https://github.com/L3MON4D3/LuaSnip?tab=readme-ov-file#keymaps
+          ['<A-y>'] = require('minuet').make_cmp_map(),
         },
         sources = {
           { name = 'nvim_lsp' },
           { name = 'luasnip' },
           { name = 'path' },
-          { name = 'cmp_ai' },
+          { name = 'minuet', group_index = 1, priority = 100 },
+        },
+        performance = {
+          -- Set to false to disable tab-completion for minuet-ai.nvim
+          minuet_tab_complete = true,
+          -- It is recommended to increase the timeout duration due to
+          -- the typically slower response speed of LLMs compared to
+          -- other completion sources. This is not needed when you only
+          -- need manual completion.
+          fetching_timeout = 2000,
         },
       }
     end,
@@ -1042,6 +1011,7 @@ require('lazy').setup({
   },
   {
     'olimorris/codecompanion.nvim',
+    enabled = false,
     event = 'VeryLazy',
     version = '^19',
     dependencies = {
@@ -1111,20 +1081,10 @@ require('lazy').setup({
   },
   {
     'github/copilot.vim',
-    enabled = true,
+    enabled = false,
     lazy = false,
     cmd = 'Copilot',
     keys = {},
-  },
-  {
-    'ggml-org/llama.vim',
-    enabled = false,
-    event = 'VeryLazy',
-    keys = {
-      vim.keymap.set('n', '<LocalLeader>l', '<cmd>Llama<cr>', { noremap = true, silent = true }),
-      vim.keymap.set('n', '<LocalLeader>c', '<cmd>LlamaChat<cr>', { noremap = true, silent = true }),
-      vim.keymap.set('v', '<LocalLeader>c', '<cmd>LlamaChat<cr>', { noremap = true, silent = true }),
-    },
   },
   {
     'https://git.sr.ht/~swaits/zellij-nav.nvim',
@@ -1144,6 +1104,35 @@ require('lazy').setup({
     ft = 'typst',
     version = '1.*',
     opts = {},
+  },
+  {
+    'milanglacier/minuet-ai.nvim',
+    opts = {
+      provider = 'openai_fim_compatible',
+      n_completions = 1, -- recommend for local model for resource saving
+      -- I recommend beginning with a small context window size and incrementally
+      -- expanding it, depending on your local computing power. A context window
+      -- of 512, serves as an good starting point to estimate your computing
+      -- power. Once you have a reliable estimate of your local computing power,
+      -- you should adjust the context window to a larger value.
+      context_window = 4096,
+      provider_options = {
+        openai_fim_compatible = {
+          -- For Windows users, TERM may not be present in environment variables.
+          -- Consider using APPDATA instead.
+          api_key = function()
+            return 'sk-xxxx'
+          end,
+          name = 'Ollama',
+          end_point = 'http://localhost:11434/v1/completions',
+          model = 'qwen2.5-coder:7b',
+          optional = {
+            max_tokens = 56,
+            top_p = 0.9,
+          },
+        },
+      },
+    },
   },
   -- The following two comments only work if you have downloaded the kickstart repo, not just copy pasted the
   -- init.lua. If you want these files, they are in the repository, so you can just download them and
