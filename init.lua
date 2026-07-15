@@ -992,76 +992,6 @@ require('lazy').setup({
     opts = {},
   },
   {
-    'olimorris/codecompanion.nvim',
-    enabled = false,
-    event = 'VeryLazy',
-    version = '^19',
-    dependencies = {
-      'nvim-lua/plenary.nvim',
-      'nvim-treesitter/nvim-treesitter',
-      {
-        'MeanderingProgrammer/render-markdown.nvim',
-        ft = { 'markdown', 'codecompanion' },
-      },
-      {
-        'HakonHarnes/img-clip.nvim',
-        opts = {
-          filetypes = {
-            codecompanion = {
-              prompt_for_file_name = false,
-              template = '[Image]($FILE_PATH)',
-              use_absolute_path = true,
-            },
-          },
-        },
-      },
-    },
-    keys = {
-      vim.keymap.set({ 'n', 'v' }, '<C-a>', '<cmd>CodeCompanionActions<cr>', { noremap = true, silent = true }),
-      vim.keymap.set({ 'n', 'v' }, '<LocalLeader>a', '<cmd>CodeCompanionChat Toggle<cr>', { noremap = true, silent = true }),
-      vim.keymap.set('v', 'ga', '<cmd>CodeCompanionChat Add<cr>', { noremap = true, silent = true }),
-      vim.keymap.set({ 'n', 'v' }, '<LocalLeader>c', '<cmd>CodeCompanion<cr>', { noremap = true, silent = true }),
-    },
-    opts = {
-      interactions = {
-        chat = {
-          adapter = 'ollama',
-          model = 'qwen3',
-        },
-        inline = {
-          adapter = 'ollama',
-          model = 'qwen3',
-        },
-        cmd = {
-          adapter = 'ollama',
-          model = 'qwen3',
-        },
-        background = {
-          adapter = 'ollama',
-          model = 'qwen3',
-        },
-      },
-      adapters = {
-        http = {
-          tavily = function()
-            return require('codecompanion.adapters').extend('tavily', {
-              env = {
-                api_key = 'TAVILY_API_KEY',
-              },
-            })
-          end,
-        },
-      },
-      mcp = {
-        servers = {
-          ['kagi-search'] = {
-            cmd = { 'uvx', 'kagimcp' },
-          },
-        },
-      },
-    },
-  },
-  {
     'github/copilot.vim',
     enabled = false,
     lazy = false,
@@ -1126,18 +1056,18 @@ require('lazy').setup({
   --  Uncomment any of the lines below to enable them (you will need to restart nvim).
   --
   -- require 'kickstart.plugins.debug',
-  -- require 'kickstart.plugins.indent_line',
+  require 'kickstart.plugins.indent_line',
   -- require 'kickstart.plugins.lint',
   require 'kickstart.plugins.autopairs',
   require 'kickstart.plugins.neo-tree',
-  -- require 'kickstart.plugins.gitsigns', -- adds gitsigns recommend keymaps
+  require 'kickstart.plugins.gitsigns', -- adds gitsigns recommend keymaps
 
   -- NOTE: The import below can automatically add your own plugins, configuration, etc from `lua/custom/plugins/*.lua`
   --    This is the easiest way to modularize your config.
   --
   --  Uncomment the following line and add your plugins to `lua/custom/plugins/*.lua` to get going.
   --    For additional information, see `:help lazy.nvim-lazy.nvim-structuring-your-plugins`
-  -- { import = 'custom.plugins' },
+  { import = 'custom.plugins' },
 }, {
   ui = {
     -- If you are using a Nerd Font: set icons to an empty table which will use the
