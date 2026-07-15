@@ -701,15 +701,16 @@ require('lazy').setup({
       --  into multiple repos for maintenance purposes.
       'hrsh7th/cmp-nvim-lsp',
       'hrsh7th/cmp-path',
-      'milanglacier/minuet-ai.nvim', -- optional; adds ai completion support
+      -- optional; adds ai completion support
+      'milanglacier/minuet-ai.nvim',
     },
-    config = function()
+    opts = function()
       -- See `:help cmp`
       local cmp = require 'cmp'
       local luasnip = require 'luasnip'
       luasnip.config.setup {}
 
-      cmp.setup {
+      return {
         snippet = {
           expand = function(args)
             luasnip.lsp_expand(args.body)
