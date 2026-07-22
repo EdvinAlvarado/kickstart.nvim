@@ -1,7 +1,7 @@
 return {
   {
     'github/copilot.vim',
-    enabled = false,
+    enabled = true,
     lazy = false,
     cmd = 'Copilot',
     keys = {},
