@@ -877,7 +877,25 @@ require('lazy').setup({
     lazy = false,
     build = ':TSUpdate',
     opts = {
-      ensure_installed = { 'bash', 'c', 'html', 'lua', 'luadoc', 'markdown', 'vim', 'vimdoc', 'rust', 'go', 'python', 'toml', 'json', 'make', 'latex', 'yaml' },
+      ensure_installed = {
+        'bash',
+        'c',
+        'html',
+        'lua',
+        'luadoc',
+        'markdown',
+        'vim',
+        'vimdoc',
+        'rust',
+        'go',
+        'python',
+        'toml',
+        'json',
+        'make',
+        'latex',
+        'yaml',
+        'commonlisp',
+      },
       -- Autoinstall languages that are not installed
       auto_install = true,
       highlight = {
