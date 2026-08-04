@@ -7,6 +7,9 @@ return {
       local lint = require 'lint'
       lint.linters_by_ft = {
         markdown = { 'markdownlint' },
+        rust = { 'clippy' },
+        fish = { 'fish' },
+        bash = { 'bash' },
       }
 
       -- To allow other plugins to add linters to require('lint').linters_by_ft,
