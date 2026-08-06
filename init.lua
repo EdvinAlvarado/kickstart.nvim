@@ -156,7 +156,8 @@ vim.opt.scrolloff = 10
 
 -- Change how much space character spaces a Tab takes.
 vim.opt.tabstop = 4
-
+-- <Tab> will insert shitfwidth/tabstop amount of tabs.
+vim.opt.shiftwidth = 4
 -- avante: views can only be fully collapsed with the global statusline
 vim.opt.laststatus = 3
 
