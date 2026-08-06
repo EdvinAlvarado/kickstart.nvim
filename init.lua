@@ -603,6 +603,7 @@ require('lazy').setup({
         'taplo', --toml
         'lua_ls',
         'tinymist', --typst
+        'ols', --odin
         -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
         --
         -- Some languages (like typescript) have entire language plugins that can be useful:
@@ -650,6 +651,7 @@ require('lazy').setup({
       end,
       formatters_by_ft = {
         lua = { 'stylua' },
+        odin = { 'odinfmt' },
         -- Conform can also run multiple formatters sequentially
         -- python = { "isort", "black" },
         --
@@ -888,6 +890,7 @@ require('lazy').setup({
         'vimdoc',
         'rust',
         'go',
+        'odin',
         'python',
         'toml',
         'json',
