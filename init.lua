@@ -604,6 +604,7 @@ require('lazy').setup({
         'lua_ls',
         'tinymist', --typst
         'ols', --odin
+        'bashls', --bash
         -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
         --
         -- Some languages (like typescript) have entire language plugins that can be useful:
