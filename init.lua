@@ -944,6 +944,14 @@ require('lazy').setup({
       { '<c-l>', '<cmd>ZellijNavigateRight<cr>', { silent = true, desc = 'navigate right' } },
     },
     opts = {},
+    config = function(_, opts)
+      require('zellij-nav').setup(opts)
+      -- NOTE: Ensures that when exiting NeoVim, Zellij returns to normal mode
+      vim.api.nvim_create_autocmd('VimLeave', {
+        pattern = '*',
+        command = 'silent !zellij action switch-mode normal',
+      })
+    end,
   },
   -- The following two comments only work if you have downloaded the kickstart repo, not just copy pasted the
   -- init.lua. If you want these files, they are in the repository, so you can just download them and
