@@ -8,7 +8,7 @@ return {
   },
   {
     'olimorris/codecompanion.nvim',
-    enabled = false,
+    enabled = true,
     event = 'VeryLazy',
     version = '^19',
     dependencies = {
@@ -38,35 +38,6 @@ return {
       vim.keymap.set({ 'n', 'v' }, '<LocalLeader>c', '<cmd>CodeCompanion<cr>', { noremap = true, silent = true }),
     },
     opts = {
-      interactions = {
-        chat = {
-          adapter = 'ollama',
-          model = 'qwen3',
-        },
-        inline = {
-          adapter = 'ollama',
-          model = 'qwen3',
-        },
-        cmd = {
-          adapter = 'ollama',
-          model = 'qwen3',
-        },
-        background = {
-          adapter = 'ollama',
-          model = 'qwen3',
-        },
-      },
-      adapters = {
-        http = {
-          tavily = function()
-            return require('codecompanion.adapters').extend('tavily', {
-              env = {
-                api_key = 'TAVILY_API_KEY',
-              },
-            })
-          end,
-        },
-      },
       mcp = {
         servers = {
           ['kagi-search'] = {
