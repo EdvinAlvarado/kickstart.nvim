@@ -1,7 +1,17 @@
 return {
   {
+    'mrcjkb/haskell-tools.nvim',
+    -- To avoid being surprised by breaking changes,
+    -- I recommend you set a version range
+    version = '^10',
+    filetypes = { 'haskell', 'lhaskell', 'cabal' },
+    -- This plugin implements proper lazy-loading (see :h lua-plugin-lazy).
+    -- No need for lazy.nvim to lazy-load it.
+    lazy = false,
+  },
+  {
     'neovimhaskell/haskell-vim',
-    event = { 'BufRead *.hs' },
+    filetypes = { 'haskell', 'lhaskell', 'cabal' },
     config = function()
       vim.g.haskell_enable_quantification = 1 -- to enable highlighting of `forall`
       vim.g.haskell_enable_recursivedo = 1 -- to enable highlighting of `mdo` and `rec`

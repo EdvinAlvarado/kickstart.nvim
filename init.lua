@@ -885,6 +885,7 @@ require('lazy').setup({
       ensure_installed = {
         'bash',
         'c',
+        'haskell',
         'html',
         'lua',
         'luadoc',
