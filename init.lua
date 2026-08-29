@@ -841,6 +841,10 @@ require('lazy').setup({
   },
   { -- Collection of various small independent plugins/modules
     'echasnovski/mini.nvim',
+    lazy = false,
+    keys = {
+      { '<leader>mm', '<cmd>lua MiniMap.toggle()<cr>', desc = '[M]ini [M]ap toggle' },
+    },
     config = function()
       -- Better Around/Inside textobjects
       --
@@ -874,6 +878,24 @@ require('lazy').setup({
 
       -- ... and there is more!
       --  Check out: https://github.com/echasnovski/mini.nvim
+      --  General Workflow
+      require('mini.cmdline').setup()
+      --  Appearance
+      require('mini.animate').setup() -- WARN: mouse scrolling is jittery with this enabled
+      require('mini.cursorword').setup()
+      require('mini.indentscope').setup()
+      require('mini.map').setup()
+      -- Always show the minimap
+      vim.api.nvim_create_autocmd('VimEnter', {
+        callback = function()
+          MiniMap.open()
+        end,
+      })
+      require('mini.notify').setup()
+      require('mini.starter').setup()
+      require('mini.statuscolumn').setup()
+      require('mini.tabline').setup()
+      require('mini.trailspace').setup()
     end,
   },
   { -- Highlight, edit, and navigate code
