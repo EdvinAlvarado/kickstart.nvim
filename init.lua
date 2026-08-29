@@ -980,7 +980,7 @@ require('lazy').setup({
   {
     'stevearc/oil.nvim',
     keys = {
-      { '<leader>o', '<cmd>Oil --float<cr>', desc = '[O]pen parent directory' },
+      { '<leader>p', '<cmd>Oil --float<cr>', desc = 'O[p]en parent directory' },
     },
     ---@module 'oil'
     ---@type oil.SetupOpts
@@ -990,6 +990,17 @@ require('lazy').setup({
     dependencies = { 'nvim-tree/nvim-web-devicons' }, -- use if you prefer nvim-web-devicons
     -- Lazy loading is not recommended because it is very tricky to make it work correctly in all situations.
     lazy = false,
+  },
+  {
+    'hedyhli/outline.nvim',
+    lazy = true,
+    cmd = { 'Outline', 'OutlineOpen' },
+    keys = { -- Example mapping to toggle outline
+      { '<leader>o', '<cmd>Outline<CR>', desc = 'Toggle [o]utline' },
+    },
+    opts = {
+      -- Your setup opts here
+    },
   },
   -- The following two comments only work if you have downloaded the kickstart repo, not just copy pasted the
   -- init.lua. If you want these files, they are in the repository, so you can just download them and
