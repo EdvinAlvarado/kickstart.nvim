@@ -1,7 +1,5 @@
 vim.keymap.set('n', '<c-r>', '<cmd>w<cr>' .. '<cmd>!cargo run<cr>')
-vim.keymap.set('n', '<c-t>', '<cmd>w<cr>' .. '<cmd>!cargo test<cr>')
-vim.keymap.set('n', '<c-c>', 'I// <esc>')
-vim.keymap.set('n', '<c-x>', '<home>xxx')
+vim.keymap.set('n', '<c-t>', '<cmd>w<cr>' .. '<cmd>!cargo nextest run<cr>')
 vim.keymap.set('n', '<c-b>', '<cmd>w<cr>' .. '<cmd>!cargo build<cr>')
 
 local bufnr = vim.api.nvim_get_current_buf()
