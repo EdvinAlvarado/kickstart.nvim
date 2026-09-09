@@ -606,6 +606,7 @@ require('lazy').setup({
         'tinymist', --typst
         'ols', --odin
         'bashls', --bash
+        'perlnavigator', --perl
         -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
         --
         -- Some languages (like typescript) have entire language plugins that can be useful:
@@ -924,6 +925,9 @@ require('lazy').setup({
         'latex',
         'yaml',
         'commonlisp',
+        'scheme',
+        'clojure',
+        'perl',
       },
       -- Autoinstall languages that are not installed
       auto_install = true,
