@@ -178,6 +178,11 @@ vim.lsp.enable(lsp_configs)
 -- [[ Basic Keymaps ]]
 --  See `:help vim.keymap.set()`
 
+-- Buffer navigation
+-- Use <Tab> and <S-Tab> to navigate buffers
+vim.keymap.set('n', '<Tab>', '<cmd>bnext<CR>', { desc = 'Next buffer' })
+vim.keymap.set('n', '<S-Tab>', '<cmd>bprevious<CR>', { desc = 'Previous buffer' })
+
 -- Set highlight on search, but clear on pressing <Esc> in normal mode
 vim.opt.hlsearch = true
 vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
