@@ -888,10 +888,10 @@ require('lazy').setup({
       --  General Workflow
       require('mini.cmdline').setup()
       --  Appearance
-      require('mini.animate').setup() -- WARN: mouse scrolling is jittery with this enabled
+      -- require('mini.animate').setup() -- WARN: mouse scrolling is jittery with this enabled
       require('mini.cursorword').setup()
       require('mini.indentscope').setup()
-      require('mini.map').setup()
+      -- require('mini.map').setup()
       -- Always show the minimap
       vim.api.nvim_create_autocmd('VimEnter', {
         callback = function()
