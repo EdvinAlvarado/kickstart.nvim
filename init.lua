@@ -893,11 +893,11 @@ require('lazy').setup({
       require('mini.indentscope').setup()
       -- require('mini.map').setup()
       -- Always show the minimap
-      vim.api.nvim_create_autocmd('VimEnter', {
-        callback = function()
-          MiniMap.open()
-        end,
-      })
+      -- vim.api.nvim_create_autocmd('VimEnter', {
+      --   callback = function()
+      --     MiniMap.open()
+      --   end,
+      -- })
       require('mini.notify').setup()
       require('mini.starter').setup()
       require('mini.statuscolumn').setup()
